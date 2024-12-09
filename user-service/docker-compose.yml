@@ -1,5 +1,6 @@
 
 version: '3.8'
+
 services:
   app:
     build:
@@ -13,17 +14,17 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     depends_on:
       - db
-    volumes:
-      - .:/app
+
   db:
-    image: postgres:15-alpine
+    image: postgres:15
     environment:
+      POSTGRES_DB: astrologix
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: astrologix
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
+
 volumes:
-  db_data:
+  db-data:

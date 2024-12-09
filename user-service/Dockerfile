@@ -1,14 +1,15 @@
-# Use a lightweight base image for Java 21
+
+# Use a lightweight JDK image for the application
 FROM eclipse-temurin:21-jdk-alpine
 
-# Set a working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the built JAR into the container
+# Copy the built JAR file into the container
 COPY target/user-service-1.0.0.jar app.jar
 
-# Expose the port your app runs on
+# Expose the application port
 EXPOSE 8080
 
-# Run the Spring Boot app
+# Run the JAR file
 ENTRYPOINT ["java", "-jar", "app.jar"]
