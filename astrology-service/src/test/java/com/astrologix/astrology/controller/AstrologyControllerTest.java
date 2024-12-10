@@ -1,5 +1,6 @@
 package com.astrologix.astrology.controller;
 
+import com.astrologix.astrology.AstrologyServiceApplication;
 import com.astrologix.astrology.dto.ZodiacResponse;
 import com.astrologix.astrology.service.AstrologyService;
 import org.junit.jupiter.api.DisplayName;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -16,6 +18,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AstrologyController.class)
+@ContextConfiguration(classes = AstrologyServiceApplication.class)
+
 class AstrologyControllerTest {
 
     @Autowired
