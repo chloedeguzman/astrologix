@@ -1,10 +1,11 @@
 package com.astrologix.user.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import jakarta.persistence.*; // For JPA annotations such as @Entity, @Id, @GeneratedValue, @Column, and @Table
-
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -17,26 +18,84 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotBlank(message = "First name is mandatory")
     private String firstName;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Last name is mandatory")
     private String lastName;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Invalid email format")
     private String email;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Password is mandatory")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
 
-    // Optional constructor for testing or specific scenarios
-    public User(String firstName, String lastName, String email, String password) {
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+    public User(String firstName, String lastName, String email, String password, Status status) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.status = status;
     }
 
+    // New constructor for testing
+    public User(Long id, String firstName, String lastName, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
-    // Optional: Add additional fields for birth details or preferences later.
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+        this.status = Status.ACTIVE;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateEmail(String newEmail) {
+        if (!isValidEmail(newEmail)) {
+            throw new IllegalArgumentException("Invalid email format.");
+        }
+        this.email = newEmail;
+    }
+
+    public void updatePassword(String newPassword) {
+        if (!isValidPassword(newPassword)) {
+            throw new IllegalArgumentException("Password does not meet complexity requirements.");
+        }
+        this.password = newPassword;
+    }
+
+    private boolean isValidEmail(String email) {
+        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+    }
+
+    private boolean isValidPassword(String password) {
+        return password.length() >= 8; // Placeholder for complexity rules
+    }
+
+    public enum Status {
+        ACTIVE,
+        INACTIVE,
+        SUSPENDED
+    }
 }
+
