@@ -1,6 +1,6 @@
 ## AstroLogix 🌌
 
-AstroLogix is a distributed astrology insights platform designed to deliver real-time, personalized astrological insights and compatibility analyses. The platform is built with a **microservices architecture**, leveraging modern cloud technologies for scalability and resilience.
+AstroLogix is a distributed astrology insights platform designed to deliver real-time, personalized astrological insights and compatibility analyses. Built on a **microservices architecture**, the platform demonstrates scalability and resilience using only free and open-source tools.
 
 ---
 
@@ -9,7 +9,7 @@ AstroLogix is a distributed astrology insights platform designed to deliver real
 - **Astrological Insights:** Get detailed zodiac-based predictions.
 - **User Compatibility:** Discover compatibility with others based on zodiac data.
 - **Microservices Architecture:** Modular design with separate services for users, astrology insights, and notifications.
-- **Cloud-Ready:** Deployable on AWS with Docker and Kubernetes for scalability.
+- **Local and Cloud-Ready:** Easily deployable on local Docker environments or free-tier cloud platforms.
 - **Real-Time Updates:** Kafka-driven event-based notifications.
 
 ---
@@ -17,13 +17,12 @@ AstroLogix is a distributed astrology insights platform designed to deliver real
 ### 🛠️ **Technology Stack**
 
 - **Backend:** Java 21, Spring Boot
-- **Data Storage:** PostgreSQL
-- **Messaging:** Kafka
+- **Data Storage:** PostgreSQL (via Docker Compose)
+- **Messaging:** Apache Kafka
 - **Caching:** Redis
-- **Cloud:** AWS (EC2, S3, RDS, Lambda)
-- **Deployment:** Docker, Kubernetes
+- **Deployment:** Docker, Kubernetes (using Minikube or k3s for free setups)
 - **Testing:** JUnit 5, TestContainers, JaCoCo
-- **CI/CD:** GitHub Actions
+- **CI/CD:** GitHub Actions (completely free)
 
 ---
 
@@ -35,7 +34,7 @@ AstroLogix is a distributed astrology insights platform designed to deliver real
    cd astrologix
    ```
 
-2. **Run the Services**
+2. **Run the Services Locally**
    - Build and run each service using Maven and Docker:
      ```bash
      cd astrology-service
@@ -47,9 +46,10 @@ AstroLogix is a distributed astrology insights platform designed to deliver real
 3. **Environment Variables**
    Set up a `.env` file in the root of the project:
    ```
-   DB_USERNAME=<your-db-username>
-   DB_PASSWORD=<your-db-password>
-   KAFKA_BROKER=<your-kafka-broker-url>
+   DB_USERNAME=postgres
+   DB_PASSWORD=postgres
+   KAFKA_BROKER=localhost:9092
+   REDIS_HOST=localhost
    ```
 
 4. **Run Tests**
@@ -76,9 +76,9 @@ AstroLogix is a distributed astrology insights platform designed to deliver real
 ### 🎯 **Goals**
 
 - **Modular Design:** Maintain clear separation between domains like astrology, user management, and notifications.
-- **High Scalability:** Handle high traffic with asynchronous messaging and cloud deployment.
+- **Prove Scalability:** Simulate high traffic using Kafka and Dockerized services.
 - **Real-Time Features:** Push live updates with Kafka and WebSockets.
-- **Advanced Analytics:** Provide insights and trends based on user behavior and astrology data.
+- **Demonstrate Analytics:** Provide insights and trends based on user behavior and astrology data.
 
 ---
 
@@ -104,3 +104,24 @@ Manages user profiles and preferences.
 2. Create a feature branch.
 3. Commit changes with clear messages.
 4. Submit a pull request for review.
+
+---
+
+### 🌐 **Free and Open-Source Tools**
+
+AstroLogix is committed to using **free tools**:
+- Local development with Docker Compose.
+- Lightweight Kubernetes: Minikube or k3s for cluster simulation.
+- GitHub Actions for free CI/CD pipelines.
+- Free-tier databases and Kafka via Docker containers.
+
+---
+
+### 📈 **Proving Scalability**
+
+AstroLogix isn't intended for production use but demonstrates:
+1. **Distributed Systems**: Effective inter-service communication via Kafka.
+2. **Modular Design**: Services can scale independently.
+3. **Cloud Compatibility**: Proven deployment methods for free-tier platforms.
+
+---
