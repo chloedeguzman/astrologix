@@ -1,47 +1,106 @@
+## AstroLogix 🌌
 
-# Astrologix User Service
+AstroLogix is a distributed astrology insights platform designed to deliver real-time, personalized astrological insights and compatibility analyses. The platform is built with a **microservices architecture**, leveraging modern cloud technologies for scalability and resilience.
 
-This project is a Spring Boot microservice that manages user data.
+---
 
-## Prerequisites
+### 🌟 **Features**
 
-- Docker & Docker Compose
-- Java 21+
-- Maven
+- **Astrological Insights:** Get detailed zodiac-based predictions.
+- **User Compatibility:** Discover compatibility with others based on zodiac data.
+- **Microservices Architecture:** Modular design with separate services for users, astrology insights, and notifications.
+- **Cloud-Ready:** Deployable on AWS with Docker and Kubernetes for scalability.
+- **Real-Time Updates:** Kafka-driven event-based notifications.
 
-## Running the Application
+---
 
-1. Clone the repository:
+### 🛠️ **Technology Stack**
+
+- **Backend:** Java 21, Spring Boot
+- **Data Storage:** PostgreSQL
+- **Messaging:** Kafka
+- **Caching:** Redis
+- **Cloud:** AWS (EC2, S3, RDS, Lambda)
+- **Deployment:** Docker, Kubernetes
+- **Testing:** JUnit 5, TestContainers, JaCoCo
+- **CI/CD:** GitHub Actions
+
+---
+
+### 🚀 **Setup Instructions**
+
+1. **Clone the Repository**
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/your-organization/astrologix.git
    cd astrologix
    ```
 
-2. Create a `.env` file in the `user-service` directory with the following:
-   ```env
-   DB_USERNAME=your_username
-   DB_PASSWORD=your_password
+2. **Run the Services**
+   - Build and run each service using Maven and Docker:
+     ```bash
+     cd astrology-service
+     mvn clean package
+     docker-compose up
+     ```
+     Repeat for `user-service` and other services.
+
+3. **Environment Variables**
+   Set up a `.env` file in the root of the project:
+   ```
+   DB_USERNAME=<your-db-username>
+   DB_PASSWORD=<your-db-password>
+   KAFKA_BROKER=<your-kafka-broker-url>
    ```
 
-3. Build and start the services:
+4. **Run Tests**
    ```bash
-   docker-compose up --build
+   mvn test
    ```
 
-4. Access the application:
-   - App: [http://localhost:8080](http://localhost:8080)
-   - Database (Postgres): Exposed on port `5432`
-
-## Running Tests
-
-1. Run Maven tests locally:
+5. **Generate Test Coverage Report**
    ```bash
-   mvn clean test
+   mvn clean verify
    ```
+   View the coverage report at `target/site/jacoco/index.html`.
 
-2. Integration Tests:
-   Integration tests use H2 as an in-memory database for fast testing.
+---
 
-## Notes
+### 🧪 **Testing and Coverage**
 
-- To rebuild the database, use `docker-compose down -v` to clear volumes.
+- **Unit Tests:** Ensuring code correctness.
+- **Integration Tests:** Validating interactions between components.
+- **Coverage Reports:** Check test coverage in `target/site/jacoco/index.html`.
+
+---
+
+### 🎯 **Goals**
+
+- **Modular Design:** Maintain clear separation between domains like astrology, user management, and notifications.
+- **High Scalability:** Handle high traffic with asynchronous messaging and cloud deployment.
+- **Real-Time Features:** Push live updates with Kafka and WebSockets.
+- **Advanced Analytics:** Provide insights and trends based on user behavior and astrology data.
+
+---
+
+### 📚 **Services Overview**
+
+#### 1. Astrology Service
+Handles astrological calculations and delivers insights based on zodiac signs.
+- Endpoints:
+   - `/api/astrology/zodiac?date=MM-DD`: Fetch zodiac details for a given date.
+- Coverage: 90%+
+
+#### 2. User Service
+Manages user profiles and preferences.
+- Endpoints:
+   - `/api/users`: User CRUD operations.
+- Coverage: 85%+
+
+---
+
+### 🛡️ **Contributing**
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit changes with clear messages.
+4. Submit a pull request for review.
