@@ -22,8 +22,7 @@ class AstrologyControllerTest {
     @DisplayName("Get Zodiac Sign - Valid Input")
     void shouldGetZodiacSignForValidInput() throws Exception {
         mockMvc.perform(get("/api/astrology/zodiac")
-                        .param("day", "25")
-                        .param("month", "3")
+                        .param("date", "03-25")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.zodiacSign").value("ARIES"))
@@ -37,33 +36,39 @@ class AstrologyControllerTest {
     @DisplayName("Get Zodiac Sign - Invalid Day")
     void shouldReturnBadRequestForInvalidDay() throws Exception {
         mockMvc.perform(get("/api/astrology/zodiac")
-                        .param("day", "32")
-                        .param("month", "3")
+                        .param("date", "03-32")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.day").value("must be less than or equal to 31"));
+                .andExpect(jsonPath("$.date").value("Invalid date provided"));
     }
 
     @Test
     @DisplayName("Get Zodiac Sign - Invalid Month")
     void shouldReturnBadRequestForInvalidMonth() throws Exception {
         mockMvc.perform(get("/api/astrology/zodiac")
-                        .param("day", "25")
-                        .param("month", "13")
+                        .param("date", "13-25")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.month").value("must be less than or equal to 12"));
+                .andExpect(jsonPath("$.date").value("Invalid date provided"));
     }
 
     @Test
     @DisplayName("Get Zodiac Sign - Both Invalid")
     void shouldReturnBadRequestForBothInvalidInputs() throws Exception {
         mockMvc.perform(get("/api/astrology/zodiac")
-                        .param("day", "32")
-                        .param("month", "13")
+                        .param("date", "13-32")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.day").value("must be less than or equal to 31"))
-                .andExpect(jsonPath("$.month").value("must be less than or equal to 12"));
+                .andExpect(jsonPath("$.date").value("Invalid date provided"));
+    }
+
+    @Test
+    @DisplayName("Get Zodiac Sign - Invalid Date Format")
+    void shouldReturnBadRequestForInvalidDateFormat() throws Exception {
+        mockMvc.perform(get("/api/astrology/zodiac")
+                        .param("date", "invalid-format")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.date").value("Invalid date provided"));
     }
 }
