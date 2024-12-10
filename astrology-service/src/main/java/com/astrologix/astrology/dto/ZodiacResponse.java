@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ZodiacResponseDTO {
+public class ZodiacResponse {
     private String zodiacSign;
     private String element;
     private String modality;

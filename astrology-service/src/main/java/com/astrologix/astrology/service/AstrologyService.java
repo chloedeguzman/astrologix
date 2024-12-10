@@ -1,6 +1,6 @@
 package com.astrologix.astrology.service;
 
-import com.astrologix.astrology.dto.ZodiacResponseDTO;
+import com.astrologix.astrology.dto.ZodiacResponse;
 import com.astrologix.astrology.model.ZodiacSign;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.time.MonthDay;
 @Service
 public class AstrologyService {
 
-    public ZodiacResponseDTO getZodiacDetails(int day, int month) {
+    public ZodiacResponse getZodiacDetails(int day, int month) {
         MonthDay inputDate;
         try {
             inputDate = MonthDay.of(month, day);
@@ -35,8 +35,8 @@ public class AstrologyService {
         }
     }
 
-    private ZodiacResponseDTO mapToZodiacResponseDTO(ZodiacSign sign) {
-        return new ZodiacResponseDTO(
+    private ZodiacResponse mapToZodiacResponseDTO(ZodiacSign sign) {
+        return new ZodiacResponse(
                 sign.name(),
                 sign.getElement(),
                 sign.getModality(),

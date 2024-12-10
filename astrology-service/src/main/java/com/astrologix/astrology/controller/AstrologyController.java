@@ -1,6 +1,6 @@
 package com.astrologix.astrology.controller;
 
-import com.astrologix.astrology.dto.ZodiacResponseDTO;
+import com.astrologix.astrology.dto.ZodiacResponse;
 import com.astrologix.astrology.service.AstrologyService;
 import com.astrologix.astrology.validation.ValidDate;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +22,13 @@ public class AstrologyController {
     }
 
     @GetMapping("/zodiac")
-    public ResponseEntity<ZodiacResponseDTO> getZodiacSign(
+    public ResponseEntity<ZodiacResponse> getZodiacSign(
             @RequestParam @ValidDate String date) {
         String[] parts = date.split("-");
         int month = Integer.parseInt(parts[0]);
         int day = Integer.parseInt(parts[1]);
 
-        ZodiacResponseDTO response = astrologyService.getZodiacDetails(day, month);
+        ZodiacResponse response = astrologyService.getZodiacDetails(day, month);
         return ResponseEntity.ok(response);
     }
 }

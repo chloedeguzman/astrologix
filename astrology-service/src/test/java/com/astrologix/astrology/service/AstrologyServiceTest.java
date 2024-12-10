@@ -1,6 +1,6 @@
 package com.astrologix.astrology.service;
 
-import com.astrologix.astrology.dto.ZodiacResponseDTO;
+import com.astrologix.astrology.dto.ZodiacResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -28,7 +28,7 @@ class AstrologyServiceTest {
     })
     @DisplayName("Test all zodiac signs for valid dates")
     void shouldReturnCorrectZodiacSignForValidDates(int day, int month, String expectedSign) {
-        ZodiacResponseDTO response = astrologyService.getZodiacDetails(day, month);
+        ZodiacResponse response = astrologyService.getZodiacDetails(day, month);
 
         assertNotNull(response);
         assertEquals(expectedSign, response.getZodiacSign());
