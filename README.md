@@ -5,7 +5,6 @@ AstroLogix is a distributed astrology insights platform designed to deliver real
 ---
 
 ### 🌟 **Features**
-
 - **Astrological Insights:** Get detailed zodiac-based predictions.
 - **User Compatibility:** Discover compatibility with others based on zodiac data.
 - **Microservices Architecture:** Modular design with separate services for users, astrology insights, and notifications.
@@ -15,7 +14,6 @@ AstroLogix is a distributed astrology insights platform designed to deliver real
 ---
 
 ### 🛠️ **Technology Stack**
-
 - **Backend:** Java 21, Spring Boot
 - **Data Storage:** PostgreSQL (via Docker Compose)
 - **Messaging:** Apache Kafka
@@ -35,93 +33,35 @@ AstroLogix is a distributed astrology insights platform designed to deliver real
    ```
 
 2. **Run the Services Locally**
-   - Build and run each service using Maven and Docker:
-     ```bash
-     cd astrology-service
-     mvn clean package
-     docker-compose up
-     ```
-     Repeat for `user-service` and other services.
 
-3. **Environment Variables**
-   Set up a `.env` file in the root of the project:
-   ```
-   DB_USERNAME=postgres
-   DB_PASSWORD=postgres
-   KAFKA_BROKER=localhost:9092
-   REDIS_HOST=localhost
+   Create the env file and use the setup and run scripts provided in each service's directory (e.g., `user-service`, `astrology-service`):
+   ```bash
+   cd user-service
+   ./set_up.sh
+   ./run_docker.sh
    ```
 
 4. **Run Tests**
+   Execute the testing commands in each service directory:
    ```bash
    mvn test
    ```
 
-5. **Generate Test Coverage Report**
-   ```bash
-   mvn clean verify
-   ```
-   View the coverage report at `target/site/jacoco/index.html`.
-
----
-
-### 🧪 **Testing and Coverage**
-
-- **Unit Tests:** Ensuring code correctness.
-- **Integration Tests:** Validating interactions between components.
-- **Coverage Reports:** Check test coverage in `target/site/jacoco/index.html`.
-
----
-
-### 🎯 **Goals**
-
-- **Modular Design:** Maintain clear separation between domains like astrology, user management, and notifications.
-- **Prove Scalability:** Simulate high traffic using Kafka and Dockerized services.
-- **Real-Time Features:** Push live updates with Kafka and WebSockets.
-- **Demonstrate Analytics:** Provide insights and trends based on user behavior and astrology data.
+For service-specific instructions, see the README in each service directory.
 
 ---
 
 ### 📚 **Services Overview**
-
-#### 1. Astrology Service
-Handles astrological calculations and delivers insights based on zodiac signs.
-- Endpoints:
-   - `/api/astrology/zodiac?date=MM-DD`: Fetch zodiac details for a given date.
-- Coverage: 90%+
-
-#### 2. User Service
-Manages user profiles and preferences.
-- Endpoints:
-   - `/api/users`: User CRUD operations.
-- Coverage: 85%+
+- **Astrology Service:** Calculates and delivers astrological insights.
+- **User Service:** Manages user profiles and preferences.
+- **Notification Service:** Handles real-time event-based notifications.
 
 ---
 
-### 🛡️ **Contributing**
+### 🎯 **Goals**
+- Modular Design: Maintain clear separation between domains.
+- Scalability: Simulate high traffic using Kafka and Dockerized services.
+- Real-Time Features: Push live updates with Kafka and WebSockets.
 
-1. Fork the repository.
-2. Create a feature branch.
-3. Commit changes with clear messages.
-4. Submit a pull request for review.
+For detailed testing and troubleshooting, see [TESTING.md](TESTING.md).
 
----
-
-### 🌐 **Free and Open-Source Tools**
-
-AstroLogix is committed to using **free tools**:
-- Local development with Docker Compose.
-- Lightweight Kubernetes: Minikube or k3s for cluster simulation.
-- GitHub Actions for free CI/CD pipelines.
-- Free-tier databases and Kafka via Docker containers.
-
----
-
-### 📈 **Proving Scalability**
-
-AstroLogix isn't intended for production use but demonstrates:
-1. **Distributed Systems**: Effective inter-service communication via Kafka.
-2. **Modular Design**: Services can scale independently.
-3. **Cloud Compatibility**: Proven deployment methods for free-tier platforms.
-
----

@@ -12,8 +12,10 @@ services:
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     depends_on:
-      - db
-      - flyway
+      db:
+        condition: service_healthy
+      flyway:
+        condition: service_started
 
   db:
     image: postgres:15
@@ -45,5 +47,6 @@ services:
       - ./db/migration:/flyway/sql
     entrypoint: ["flyway", "migrate"]
 
-#volumes:
-#  db-data:
+volumes:
+  db-data:
+    driver: local
