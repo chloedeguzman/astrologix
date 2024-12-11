@@ -37,19 +37,15 @@ class GlobalExceptionHandlerTest {
     @Test
     @DisplayName("Handle MethodArgumentNotValidException")
     void shouldHandleValidationExceptions() {
-        // Mock the BindingResult
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.getFieldErrors())
                 .thenReturn(List.of(new FieldError("objectName", "fieldName", "Field is required")));
 
-        // Mock MethodArgumentNotValidException
         MethodArgumentNotValidException mockException = mock(MethodArgumentNotValidException.class);
         when(mockException.getBindingResult()).thenReturn(bindingResult);
 
-        // Call the handler
         ErrorResponse response = exceptionHandler.handleValidationExceptions(mockException, request);
 
-        // Assertions
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals("Validation Error", response.getError());
         assertEquals("fieldName: Field is required", response.getMessage());
@@ -58,33 +54,25 @@ class GlobalExceptionHandlerTest {
 
     @Test
     @DisplayName("Handle ConstraintViolationException")
-    void testHandleConstraintViolationException() {
-        // Mock the property path
+    void shouldHandleConstraintViolationException() {
         Path mockPath = mock(Path.class);
         when(mockPath.toString()).thenReturn("fieldName");
 
-        // Mock ConstraintViolation
         ConstraintViolation<?> mockViolation = mock(ConstraintViolation.class);
         when(mockViolation.getPropertyPath()).thenReturn(mockPath);
         when(mockViolation.getMessage()).thenReturn("must not be null");
 
-        // Create a set of violations
         Set<ConstraintViolation<?>> violations = Set.of(mockViolation);
 
-        // Mock ConstraintViolationException
         ConstraintViolationException exception = new ConstraintViolationException(violations);
 
-        // Call the exception handler
         ErrorResponse response = exceptionHandler.handleConstraintViolationException(exception, request);
 
-        // Assertions
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals("Validation Error", response.getError());
         assertEquals("fieldName: must not be null", response.getMessage());
         assertEquals("/api/test", response.getPath());
     }
-
-
 
     @Test
     @DisplayName("Handle IllegalArgumentException")
@@ -124,12 +112,5 @@ class GlobalExceptionHandlerTest {
         assertEquals("/api/test", response.getPath());
     }
 
-    // Helper method to mock ConstraintViolation
-    private ConstraintViolation<?> mockViolation(String path, String message) {
-        jakarta.validation.ConstraintViolation<?> mockViolation = mock(jakarta.validation.ConstraintViolation.class);
-        when(mockViolation.getPropertyPath().toString()).thenReturn(path);
-        when(mockViolation.getMessage()).thenReturn(message);
-        return mockViolation;
-    }
 }
 

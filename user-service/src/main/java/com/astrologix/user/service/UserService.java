@@ -1,6 +1,6 @@
 package com.astrologix.user.service;
 
-import com.astrologix.user.dto.UserResponseDTO;
+import com.astrologix.user.dto.UserResponse;
 import com.astrologix.user.dto.ZodiacResponse;
 import com.astrologix.user.entity.User;
 import com.astrologix.user.exception.UserNotFoundException;
@@ -60,7 +60,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public UserResponseDTO getUserWithZodiac(Long userId) {
+    public UserResponse getUserWithZodiac(Long userId) {
         // Fetch user from the database
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -73,7 +73,7 @@ public class UserService {
         ZodiacResponse zodiacDetails = astrologyIntegrationService.getZodiacDetails(dateOfBirth);
 
         // Map user and zodiac details to the response DTO
-        return new UserResponseDTO(
+        return new UserResponse(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
