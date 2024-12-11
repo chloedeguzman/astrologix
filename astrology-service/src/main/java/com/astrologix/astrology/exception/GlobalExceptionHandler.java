@@ -39,15 +39,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(ConstraintViolationException ex, HttpServletRequest request) {
-        String message = ex.getConstraintViolations()
-                .stream()
+        String message = ex.getConstraintViolations().stream()
                 .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
                 .collect(Collectors.joining(", "));
-
         return new ErrorResponse(
-                LocalDateTime.now(),
+                LocalDateTime.now(), // Add the timestamp
                 HttpStatus.BAD_REQUEST.value(),
-                "Constraint Violation",
+                "Validation Error",
                 message,
                 request.getRequestURI()
         );
