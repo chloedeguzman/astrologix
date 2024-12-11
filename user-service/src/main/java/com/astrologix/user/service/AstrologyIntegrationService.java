@@ -35,23 +35,35 @@ public class AstrologyIntegrationService {
     }
 
     private ZodiacResponse fetchZodiacDetails(String date) {
-        ResponseEntity<ZodiacResponse> response = restTemplate.getForEntity(
-                astrologyServiceUrl + "?date=" + date, ZodiacResponse.class);
+        String requestUrl = buildRequestUrl(date);
+        ResponseEntity<ZodiacResponse> response = restTemplate.getForEntity(requestUrl, ZodiacResponse.class);
         return response.getBody();
+    }
+
+    private String buildRequestUrl(String date) {
+        return astrologyServiceUrl + "?date=" + date;
     }
 
     private void handleException(Exception e, String date) {
         if (e instanceof ResourceAccessException) {
-            log.error(e, () -> "Astrology service timed out for date: " + date);
+            logError("Astrology service timed out for date: " + date, e);
         } else if (e instanceof HttpClientErrorException.NotFound) {
-            log.error(e, () -> "Astrology service returned 404 for date: " + date);
+            logError("Astrology service returned 404 for date: " + date, e);
         } else if (e instanceof HttpServerErrorException) {
-            log.error(e, () -> "Astrology service returned 500 for date: " + date);
+            logError("Astrology service returned 500 for date: " + date, e);
         } else if (e instanceof HttpClientErrorException clientError) {
-            log.error(e, () -> "Astrology service returned error " + clientError.getStatusCode() + " for date: " + date);
+            logError("Astrology service returned error " + clientError.getStatusCode() + " for date: " + date, e);
         } else {
-            log.error(e, () -> "An unexpected error occurred: " + e.getMessage());
-            throw new RuntimeException("Unhandled exception occurred during astrology service call", e);
+            logUnexpectedError(e);
         }
+    }
+
+    private void logError(String message, Exception e) {
+        log.error(e, () -> message);
+    }
+
+    private void logUnexpectedError(Exception e) {
+        log.error(e, () -> "An unexpected error occurred: " + e.getMessage());
+        throw new RuntimeException("Unhandled exception occurred during astrology service call", e);
     }
 }

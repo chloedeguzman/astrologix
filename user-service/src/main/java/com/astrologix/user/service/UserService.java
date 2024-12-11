@@ -33,25 +33,14 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
-        user.setStatus(User.Status.ACTIVE);
+        validateEmailUniqueness(user.getEmail());
+        setTimestampsForCreation(user);
         return userRepository.save(user);
     }
 
     public User updateUser(Long id, User user) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        existingUser.setFirstName(user.getFirstName());
-        existingUser.setLastName(user.getLastName());
-        existingUser.setEmail(user.getEmail());
-        if (user.getPassword() != null && !user.getPassword().isBlank()) {
-            existingUser.setPassword(user.getPassword());
-        }
+        User existingUser = findUserById(id);
+        updateUserFields(existingUser, user);
         existingUser.setUpdatedAt(LocalDateTime.now());
         return userRepository.save(existingUser);
     }
@@ -61,18 +50,44 @@ public class UserService {
     }
 
     public UserResponse getUserWithZodiac(Long userId) {
-        // Fetch user from the database
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        // Extract date of birth (stubbed as "03-25" for now)
-        // Replace this with actual logic when date of birth is added to User entity
-        String dateOfBirth = "03-25";
-
-        // Fetch zodiac details
+        User user = findUserById(userId);
+        String dateOfBirth = extractDateOfBirth(user); // Stubbed logic
         ZodiacResponse zodiacDetails = astrologyIntegrationService.getZodiacDetails(dateOfBirth);
+        return mapToUserResponseDTO(user, zodiacDetails);
+    }
 
-        // Map user and zodiac details to the response DTO
+    private void validateEmailUniqueness(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+    }
+
+    private void setTimestampsForCreation(User user) {
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        user.setStatus(User.Status.ACTIVE);
+    }
+
+    private User findUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+    }
+
+    private void updateUserFields(User existingUser, User updatedUser) {
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setLastName(updatedUser.getLastName());
+        existingUser.setEmail(updatedUser.getEmail());
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
+            existingUser.setPassword(updatedUser.getPassword());
+        }
+    }
+
+    private String extractDateOfBirth(User user) {
+        // Placeholder logic. Replace with actual date of birth field when added to the User entity.
+        return "03-25";
+    }
+
+    private UserResponse mapToUserResponseDTO(User user, ZodiacResponse zodiacDetails) {
         return new UserResponse(
                 user.getId(),
                 user.getFirstName(),
