@@ -1,5 +1,7 @@
 package com.astrologix.user.service;
 
+import com.astrologix.user.dto.UserResponseDTO;
+import com.astrologix.user.dto.ZodiacResponse;
 import com.astrologix.user.entity.User;
 import com.astrologix.user.exception.UserNotFoundException;
 import com.astrologix.user.repository.UserRepository;
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AstrologyIntegrationService astrologyIntegrationService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AstrologyIntegrationService astrologyIntegrationService) {
         this.userRepository = userRepository;
+        this.astrologyIntegrationService = astrologyIntegrationService;
     }
 
     public List<User> getAllUsers() {
@@ -54,5 +58,27 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public UserResponseDTO getUserWithZodiac(Long userId) {
+        // Fetch user from the database
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        // Extract date of birth (stubbed as "03-25" for now)
+        // Replace this with actual logic when date of birth is added to User entity
+        String dateOfBirth = "03-25";
+
+        // Fetch zodiac details
+        ZodiacResponse zodiacDetails = astrologyIntegrationService.getZodiacDetails(dateOfBirth);
+
+        // Map user and zodiac details to the response DTO
+        return new UserResponseDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                zodiacDetails
+        );
     }
 }

@@ -41,5 +41,4 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
-
 }
